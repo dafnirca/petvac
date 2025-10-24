@@ -1,1 +1,0 @@
-# Funções que ligam o front e o backend
