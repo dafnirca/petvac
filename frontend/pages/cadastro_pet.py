@@ -1,7 +1,9 @@
 import streamlit as st
-from backend.services import cadastrar_pet_service
+from backend.services import cadastrar_pet, atualizar_pet
+from frontend.pages.style import set_css 
+set_css()
 
-st.header("Cadastro de Pet")
+st.header("🐕 Cadastro de Pet")
 nome = st.text_input("Nome do Pet")
 especie = st.text_input("Espécie")
 raca = st.text_input("Raça")
@@ -12,14 +14,14 @@ if st.button("Cadastrar Pet"):
     st.success(msg)
     
     
-st.header("Atualizar Dados do Pet")
+st.header("✏️ Atualizar Dados do Pet")
 idPet = st.number_input("ID do Pet", min_value=1, step=1)
 novo_nome = st.text_input("Novo nome (opcional)")
 nova_especie = st.text_input("Nova espécie (opcional)")
 nova_raca = st.text_input("Nova raça (opcional)")
 nova_data = st.date_input("Nova data de nascimento (opcional)")
 novo_tutor = st.number_input("Novo ID do tutor (opcional)", min_value=0, step=1)
-if st.button("Atualizar Pet"):
+if st.button("🐶 Atualizar Pet"):
     novos_dados = {}
     if novo_nome: novos_dados["nome"] = novo_nome
     if nova_especie: novos_dados["especie"] = nova_especie
