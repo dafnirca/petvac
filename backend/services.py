@@ -1,9 +1,13 @@
 from backend.database import carregar_dados, salvar_dados, COLUNAS
 from backend.pet import Pet
 from backend.tutor import Tutor
+from backend.vacina import Vacina
+from backend.historico_vacinas import HistoricoVacinas
 
 import pandas as pd
 from datetime import datetime
+
+# ---------- PETS ----------
 
 def cadastrar_pet(nome, especie, raca, dataNascimento, idTutor):
     df = carregar_dados("data/pets.csv", COLUNAS["pets"])
@@ -24,6 +28,9 @@ def atualizar_pet(idPet, novos_dados):
 
 def listar_pets():
     return carregar_dados("data/pets.csv", COLUNAS["pets"])
+
+
+# ---------- TUTORES ----------
 
 def cadastrar_tutor(nome, telefone, email, endereco):
     df = carregar_dados("data/tutores.csv", COLUNAS["tutores"])
@@ -46,23 +53,28 @@ def listar_tutores():
     return carregar_dados("data/tutores.csv", COLUNAS["tutores"])
 
 
-"""
-def cadastrar_pet_service(nome, especie, raca, dataNascimento, idTutor):
-    colunas = ["idPet", "nome", "especie", "raca", "dataNascimento", "idTutor"]
-    df_pets = carregar_dados("data/pets.csv", colunas)
+# ---------- VACINAS E HISTÓRICO ----------
+def registrar_vacina(idPet, nome, dataAplicacao, dataProximaDose, status="aplicada"):
+    df = carregar_dados("data/vacinas.csv", COLUNAS["vacinas"])
+    novo_id = len(df) + 1
+    vacina = Vacina(novo_id, idPet, nome, dataAplicacao, dataProximaDose, status)
+    df = df._append(vars(vacina), ignore_index=True)
+    salvar_dados(df, "data/vacinas.csv")
+    return "Vacina registrada com sucesso!"
 
-    novo_id = len(df_pets) + 1
-    novo_pet = {
-        "idPet": novo_id,
-        "nome": nome,
-        "especie": especie,
-        "raca": raca,
-        "dataNascimento": str(dataNascimento),
-        "idTutor": idTutor
-    }
+def consultar_vacinas_pendentes():
+    df = carregar_dados("data/vacinas.csv", COLUNAS["vacinas"])
+    if df.empty:
+        return pd.DataFrame()
+    hoje = datetime.now().date()
+    df["dataProximaDose"] = pd.to_datetime(df["dataProximaDose"], errors="coerce").dt.date
+    pendentes = df[df["dataProximaDose"] <= hoje]
+    return pendentes
 
-    df_pets = df_pets._append(novo_pet, ignore_index=True)  # pandas >= 2.0 usa _append
-    salvar_dados(df_pets, "data/pets.csv")
+def consultar_historico_pet(idPet):
+    df_vacinas = carregar_dados("data/vacinas.csv", COLUNAS["vacinas"])
+    historico = df_vacinas[df_vacinas["idPet"] == idPet]
+    if historico.empty:
+        return "Nenhum registro de vacina para este pet."
+    return historico
 
-    return "Pet cadastrado com sucesso!"
-"""
