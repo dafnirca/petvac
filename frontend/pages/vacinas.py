@@ -1,6 +1,6 @@
 import streamlit as st
 from datetime import date
-from backend.services import registrar_vacina, consultar_vacinas_pendentes, consultar_historico_pet
+from backend.services import registrar_vacina, consultar_vacinas_pendentes
 from frontend.pages.style import set_css
 
 set_css()
@@ -34,14 +34,3 @@ if st.button("Consultar Vacinas Pendentes"):
     else:
         st.dataframe(pendentes, use_container_width=True)
 
-
-st.header("📖 Histórico de Vacinas do Pet")
-
-id_pet_historico = st.number_input("Informe o ID do Pet para consultar o histórico", min_value=1, step=1)
-
-if st.button("Consultar Histórico"):
-    historico = consultar_historico_pet(id_pet_historico)
-    if isinstance(historico, str):
-        st.info(historico)
-    else:
-        st.dataframe(historico, use_container_width=True)
