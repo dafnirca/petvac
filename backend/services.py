@@ -59,6 +59,7 @@ def registrar_vacina(idPet, nome, dataAplicacao, dataProximaDose, status="aplica
     novo_id = len(df) + 1
     vacina = Vacina(novo_id, idPet, nome, dataAplicacao, dataProximaDose, status)
     df = df._append(vars(vacina), ignore_index=True)
+    
     salvar_dados(df, "data/vacinas.csv")
     return "Vacina registrada com sucesso!"
 

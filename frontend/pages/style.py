@@ -52,7 +52,7 @@ def set_css():
                 color: #1E3A5F !important;
             }
 
-            /* === Barra superior (Header) === */
+            /* === Header === */
             header[data-testid="stHeader"] {
                 background-color: #2A2E5F; /* Azul escuro */
                 color: white;
@@ -88,6 +88,13 @@ def set_css():
             /* Divisores */
             hr {
                 border: 1px solid #D1747B;
+            }
+                
+            /* notificações */
+           div[role="alert"] *, div[role="status"] *, div[data-testid="stAlert"] *, div[data-testid="stNotification"] * {
+                color: inherit !important;
+                background: transparent !important;
+                text-shadow: none !important;
             }
 
         </style>
