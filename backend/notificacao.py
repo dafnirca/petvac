@@ -8,12 +8,12 @@ class Notificacao:
         self.status = "pendente"
 
     def enviarNotificacao(self):
-        if self.status == "enviada":
+        if self.status == "pendente":
+            self.status = "enviada"
+            self.dataEnvio = datetime.now().strftime("%d/%m %H:%M")
+            return f"Notificação {self.idNotificacao} enviada."
+        else:
             return "Notificação já foi enviada."
-        
-        self.status = "enviada"
-        self.dataEnvio = datetime.now().strftime("%d/%m %H:%M")
-        return f"Notificação {self.idNotificacao} enviada."
         
 
     def marcarComoLida(self):
