@@ -2,6 +2,8 @@ from backend.database import carregar_dados, salvar_dados, COLUNAS
 from backend.pet import Pet
 from backend.tutor import Tutor
 from backend.vacina import Vacina
+from backend.usuario import Usuario
+
 from backend.historico_vacinas import HistoricoVacinas
 
 import pandas as pd
@@ -78,4 +80,61 @@ def consultar_historico_pet(idPet):
     if historico.empty:
         return "Nenhum registro de vacina para este pet."
     return historico
+
+# ---------- LOGIN ----------
+
+def login_usuario(nome, cargo):
+    df = carregar_dados("data/usuarios.csv", COLUNAS["usuarios"])
+
+    if df.empty:
+        return "❌ Erro: Não há usuários cadastrados."
+
+    if "logado" not in df.columns:
+        df["logado"] = False
+
+    # procura usuário usando nome + cargo
+    match_index = df[
+        (df["nome"].str.strip().str.lower() == nome.strip().lower()) &
+        (df["cargo"].str.strip().str.lower() == cargo.strip().lower())
+    ].index
+
+    if match_index.empty:
+        return "❌ Usuário ou cargo inválido."
+
+    index = match_index[0]
+    dados = df.loc[index]
+
+    usuario = Usuario(dados["idUsuario"], dados["nome"], dados["cargo"])
+    usuario.logado = True
+
+    df.loc[index, "logado"] = True
+    salvar_dados(df, "data/usuarios.csv")
+
+    return f"✅ Login realizado com sucesso! Bem-vindo(a), {dados['nome']}."
+
+
+def logout_usuario(nome, cargo):
+    df = carregar_dados("data/usuarios.csv", COLUNAS["usuarios"])
+
+    if df.empty:
+        return "⚠️ Nenhum usuário cadastrado."
+
+    if "logado" not in df.columns:
+        return "⚠️ Nenhum usuário está logado atualmente."
+
+    # busca por nome + cargo
+    match_index = df[
+        (df["nome"].str.strip().str.lower() == nome.strip().lower()) &
+        (df["cargo"].str.strip().str.lower() == cargo.strip().lower())
+    ].index
+
+    if match_index.empty:
+        return "❌ Usuário não encontrado para logout."
+
+    index = match_index[0]
+
+    df.loc[index, "logado"] = False
+    salvar_dados(df, "data/usuarios.csv")
+
+    return f"👋 Logout realizado. Até logo, {nome}!"
 
