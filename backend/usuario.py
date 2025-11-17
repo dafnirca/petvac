@@ -1,8 +1,9 @@
 class Usuario:
-    def __init__(self, idUsuario, nome, cargo: {"recepcionista", "veterinario","tutor"}):
+    def __init__(self, idUsuario, nome, senha, cargo: {"recepcionista", "veterinario"}):
         self.idUsuario = idUsuario
         self.nome = nome
         self.cargo = cargo
+        self.senha = senha
         self.logado = False
     
     def login(self):

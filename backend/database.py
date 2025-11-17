@@ -7,11 +7,23 @@ def carregar_dados(caminho, colunas):
         df.to_csv(caminho, index=False)
         return df
     try:
-        return pd.read_csv(caminho)
+        df = pd.read_csv(caminho)
+
+        # Garantir que TODAS as colunas existem
+        for col in colunas:
+            if col not in df.columns:
+                df[col] = None
+
+        # Reordenar
+        df = df[colunas]
+
+        return df
+
     except pd.errors.EmptyDataError:
         df = pd.DataFrame(columns=colunas)
         df.to_csv(caminho, index=False)
         return df
+
 
 def salvar_dados(df, caminho):
     df.to_csv(caminho, index=False)
@@ -20,6 +32,6 @@ COLUNAS = {
     "pets": ["idPet", "nome", "especie", "raca", "dataNascimento", "idTutor"],
     "tutores": ["idTutor", "nome", "telefone", "email", "endereco"],
     "vacinas": ["idVacina", "idPet", "nome", "dataAplicacao", "dataProximaDose", "status"],
-    "usuarios": ["idUsuario", "nome", "cargo"],
+    "usuarios": ["idUsuario", "nome", "senha", "cargo"],
     "notificacoes": ["idNotificacao", "mensagem", "dataEnvio", "status"]
 }

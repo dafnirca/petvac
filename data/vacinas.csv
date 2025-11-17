@@ -1,2 +1,7 @@
 idVacina,idPet,nome,dataAplicacao,dataProximaDose,status
 1,1,antiraiva,2025-11-05,2025-11-05,aplicada
+2,1,Calicivirose,2025-11-17,2025-11-17,aplicada
+3,1,Calicivirose,2025-11-17,2025-12-17,aplicada
+4,1,Calicivirose,2025-11-17,2025-12-17,aplicada
+5,2,Calicivirose,2025-11-17,2025-12-17,aplicada
+6,3,Calicivirose,2025-11-17,2025-12-18,aplicada

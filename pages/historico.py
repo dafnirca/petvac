@@ -1,6 +1,6 @@
 import streamlit as st
 from backend.services import consultar_historico_pet
-from frontend.pages.style import set_css
+from pages.style import set_css
 
 set_css()
 

@@ -1,7 +1,7 @@
 import streamlit as st
 from datetime import date
 from backend.services import registrar_vacina, consultar_vacinas_pendentes
-from frontend.pages.style import set_css
+from pages.style import set_css
 
 set_css()
 
@@ -33,4 +33,3 @@ if st.button("Consultar Vacinas Pendentes"):
         st.info("Nenhuma vacina pendente encontrada.")
     else:
         st.dataframe(pendentes, use_container_width=True)
-

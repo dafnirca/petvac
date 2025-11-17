@@ -3,8 +3,8 @@ from backend.pet import Pet
 from backend.tutor import Tutor
 from backend.vacina import Vacina
 from backend.usuario import Usuario
-
 from backend.historico_vacinas import HistoricoVacinas
+from backend.notificacao import Notificacao
 
 import pandas as pd
 from datetime import datetime
@@ -83,37 +83,62 @@ def consultar_historico_pet(idPet):
 
 # ---------- LOGIN ----------
 
-def login_usuario(nome, cargo):
+def login_usuario(nome, senha, cargo):
     df = carregar_dados("data/usuarios.csv", COLUNAS["usuarios"])
 
     if df.empty:
-        return "❌ Erro: Não há usuários cadastrados."
+        return False, "❌ Não há usuários cadastrados."
 
-    if "logado" not in df.columns:
-        df["logado"] = False
+    # Normalização forte dos inputs
+    nome_norm = nome.strip().lower()
+    senha_norm = senha.strip()
+    cargo_norm = cargo.strip().lower()
 
-    # procura usuário usando nome + cargo
+    # Criar colunas normalizadas apenas em memória
+    df["nome_norm"] = df["nome"].astype(str).str.strip().str.lower()
+    df["cargo_norm"] = df["cargo"].astype(str).str.strip().str.lower()
+    df["senha_norm"] = df["senha"].astype(str).str.strip()
+
     match_index = df[
-        (df["nome"].str.strip().str.lower() == nome.strip().lower()) &
-        (df["cargo"].str.strip().str.lower() == cargo.strip().lower())
+        (df["nome_norm"] == nome_norm) &
+        (df["senha_norm"] == senha_norm) &
+        (df["cargo_norm"] == cargo_norm)
     ].index
 
     if match_index.empty:
-        return "❌ Usuário ou cargo inválido."
+        return False, "❌ Usuário ou senha inválidos."
 
+    # Marca como logado
     index = match_index[0]
-    dados = df.loc[index]
-
-    usuario = Usuario(dados["idUsuario"], dados["nome"], dados["cargo"])
-    usuario.logado = True
-
     df.loc[index, "logado"] = True
+
+    # ⚠️ REMOVE colunas normalizadas antes de salvar
+    df = df.drop(columns=["nome_norm", "cargo_norm", "senha_norm"])
+
     salvar_dados(df, "data/usuarios.csv")
 
-    return f"✅ Login realizado com sucesso! Bem-vindo(a), {dados['nome']}."
+    return True, f"Login realizado com sucesso! Bem-vindo(a), {df.loc[index, 'nome']}."
 
 
-def logout_usuario(nome, cargo):
+def cadastrar_usuario(nome, senha, cargo):
+    df = carregar_dados("data/usuarios.csv", COLUNAS["usuarios"])
+
+    novo_id = len(df) + 1
+
+    novo_usuario = {
+        "idUsuario": novo_id,
+        "nome": nome,
+        "senha": senha,
+        "cargo": cargo
+    }
+
+    df = df._append(novo_usuario, ignore_index=True)
+    salvar_dados(df, "data/usuarios.csv")
+
+    return True, "Usuário cadastrado com sucesso!"
+
+
+def logout_usuario(nome, senha, cargo):
     df = carregar_dados("data/usuarios.csv", COLUNAS["usuarios"])
 
     if df.empty:
@@ -125,6 +150,7 @@ def logout_usuario(nome, cargo):
     # busca por nome + cargo
     match_index = df[
         (df["nome"].str.strip().str.lower() == nome.strip().lower()) &
+        (df["senha"] == senha) &
         (df["cargo"].str.strip().str.lower() == cargo.strip().lower())
     ].index
 
@@ -138,3 +164,24 @@ def logout_usuario(nome, cargo):
 
     return f"👋 Logout realizado. Até logo, {nome}!"
 
+
+# ---------- NOTIFICAÇÕES ----------
+def gerar_notificacoes_pendentes():
+    vacinas = consultar_vacinas_pendentes()
+    if vacinas.empty:
+        return "Nenhuma vacina pendente."
+    df_not = carregar_dados("data/notificacoes.csv", COLUNAS["notificacoes"])
+    count = 0
+    for _, v in vacinas.iterrows():
+        msg = f"Vacina '{v['nome']}' do pet {v['idPet']} está pendente!"
+        notificacao = Notificacao(len(df_not) + 1, msg, datetime.now().strftime("%Y-%m-%d"), "pendente")
+        df_not = df_not._append(vars(notificacao), ignore_index=True)
+        count += 1
+    salvar_dados(df_not, "data/notificacoes.csv")
+    return f"{count} notificações geradas."
+
+def marcar_notificacao_como_lida(idNotificacao):
+    df = carregar_dados("data/notificacoes.csv", COLUNAS["notificacoes"])
+    df.loc[df["idNotificacao"] == idNotificacao, "status"] = "lida"
+    salvar_dados(df, "data/notificacoes.csv")
+    return f"Notificação {idNotificacao} marcada como lida."
