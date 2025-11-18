@@ -43,7 +43,13 @@ else:
 
 
 nome_vacina = st.text_input("Nome da Vacina")
-data_aplicacao = st.date_input("Data de Aplicação", value=None)
+
+foi_aplicada = st.checkbox("A vacina já foi aplicada?")
+
+data_aplicacao = None
+if foi_aplicada:
+    data_aplicacao = st.date_input("Data da Aplicação", value=date.today())
+
 data_proxima_dose = st.date_input("Data da Próxima Dose (opcional)", value=None)
 
 if st.button("Registrar Vacina"):
