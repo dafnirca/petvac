@@ -6,6 +6,7 @@ from backend.usuario import Usuario
 from backend.historico_vacinas import HistoricoVacinas
 from backend.notificacao import Notificacao
 
+from datetime import date, datetime
 import pandas as pd
 from datetime import datetime
 
@@ -56,30 +57,122 @@ def listar_tutores():
 
 
 # ---------- VACINAS E HISTÓRICO ----------
-def registrar_vacina(idPet, nome, dataAplicacao, dataProximaDose, status="aplicada"):
+def registrar_vacina(idPet, nome, dataAplicacao=None, dataProximaDose=None):
+    """
+    dataAplicacao pode ser: None, datetime.date, datetime.datetime ou string 'YYYY-MM-DD'
+    dataProximaDose idem.
+    Regra de status:
+      - se dataAplicacao é None -> pendente
+      - se dataAplicacao <= hoje -> aplicada
+      - se dataAplicacao > hoje -> pendente (aplicacao agendada)
+    """
     df = carregar_dados("data/vacinas.csv", COLUNAS["vacinas"])
     novo_id = len(df) + 1
-    vacina = Vacina(novo_id, idPet, nome, dataAplicacao, dataProximaDose, status)
-    df = df._append(vars(vacina), ignore_index=True)
-    
+
+    def to_date_or_none(v):
+        if v is None:
+            return None
+        if isinstance(v, date):
+            return v
+        try:
+            return pd.to_datetime(v, errors="coerce").date()
+        except Exception:
+            return None
+
+    dataAplicacao_date = to_date_or_none(dataAplicacao)
+    dataProximaDose_date = to_date_or_none(dataProximaDose)
+
+    hoje = datetime.now().date()
+
+    if dataAplicacao_date is None:
+        status = "pendente"
+    else:
+        # se a aplicação ocorreu hoje ou antes -> aplicada
+        if dataAplicacao_date <= hoje:
+            status = "aplicada"
+        else:
+            # aplicação informada para o futuro -> é um agendamento
+            status = "pendente"
+
+    vacina = {
+        "idVacina": novo_id,
+        "idPet": idPet,
+        "nome": nome,
+        "dataAplicacao": str(dataAplicacao_date) if dataAplicacao_date else "",
+        "dataProximaDose": str(dataProximaDose_date) if dataProximaDose_date else "",
+        "status": status
+    }
+
+    df = df._append(vacina, ignore_index=True)
     salvar_dados(df, "data/vacinas.csv")
     return "Vacina registrada com sucesso!"
+
 
 def consultar_vacinas_pendentes():
     df = carregar_dados("data/vacinas.csv", COLUNAS["vacinas"])
     if df.empty:
         return pd.DataFrame()
+    
     hoje = datetime.now().date()
+
     df["dataProximaDose"] = pd.to_datetime(df["dataProximaDose"], errors="coerce").dt.date
-    pendentes = df[df["dataProximaDose"] <= hoje]
+
+    # pendente = próxima dose existe e vacina NÃO foi aplicada
+    pendentes = df[(df["status"] == "pendente")]
+
+    # adicionar coluna atrasada
+    pendentes["atrasada"] = pendentes["dataProximaDose"] < hoje
+
     return pendentes
 
+
 def consultar_historico_pet(idPet):
-    df_vacinas = carregar_dados("data/vacinas.csv", COLUNAS["vacinas"])
-    historico = df_vacinas[df_vacinas["idPet"] == idPet]
+    df = carregar_dados("data/vacinas.csv", COLUNAS["vacinas"])
+
+    historico = df[df["idPet"] == idPet]
+
     if historico.empty:
         return "Nenhum registro de vacina para este pet."
+
+    historico["dataAplicacao"] = pd.to_datetime(historico["dataAplicacao"], errors="coerce")
+    historico["dataProximaDose"] = pd.to_datetime(historico["dataProximaDose"], errors="coerce")
+
+    historico = historico.sort_values(by=["dataAplicacao", "dataProximaDose"], ascending=True)
+
     return historico
+
+
+def aplicar_dose(idVacina, dataAplicacao, dataProximaDose=None):
+    df = carregar_dados("data/vacinas.csv", COLUNAS["vacinas"])
+
+    # Seleciona a vacina pendente que será aplicada
+    vacina_antiga = df[df["idVacina"] == idVacina]
+
+    if vacina_antiga.empty:
+        return "Vacina não encontrada."
+
+    idPet = int(vacina_antiga.iloc[0]["idPet"])
+    nome = vacina_antiga.iloc[0]["nome"]
+
+    # Atualiza o status da vacina antiga
+    df.loc[df["idVacina"] == idVacina, "status"] = "concluída"
+
+    # Registra nova dose aplicada como novo registro
+    novo_id = len(df) + 1
+    novo_registro = {
+        "idVacina": novo_id,
+        "idPet": idPet,
+        "nome": nome,
+        "dataAplicacao": str(dataAplicacao),
+        "dataProximaDose": str(dataProximaDose) if dataProximaDose else None,
+        "status": "aplicada"
+    }
+
+    df = df._append(novo_registro, ignore_index=True)
+
+    salvar_dados(df, "data/vacinas.csv")
+    return "Dose aplicada com sucesso!"
+
 
 # ---------- LOGIN ----------
 
