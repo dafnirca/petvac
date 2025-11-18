@@ -1,14 +1,13 @@
 import streamlit as st
 from backend.services import login_usuario, logout_usuario, cadastrar_usuario
+from pages.style import set_css
+
+set_css()
 
 st.set_page_config(page_title="PetVac", page_icon="🐾", layout="wide")
 
-# -----------------------------------------------------------
-# Sessão
-# -----------------------------------------------------------
 if "usuario" not in st.session_state:
     st.session_state["usuario"] = None
-
 
 # -----------------------------------------------------------
 # Tela de login
@@ -89,21 +88,14 @@ if st.sidebar.button("Sair"):
     st.rerun()
 
 
-pages = {
-    "Tutores": [
-        st.Page("pages/cadastro_tutor.py", title="Cadastrar ou Atualizar")
-    ],
-    "Pets": [
-        st.Page("pages/cadastro_pet.py", title="Cadastrar ou Atualizar")
-    ],
-    "Vacinas": [
-        st.Page("pages/vacinas.py", title="Registrar Vacina"),
-        st.Page("pages/historico.py", title="Histórico do Pet")
-    ],
-    "Outros": [
-        st.Page("pages/0_Cadastrar_Usuario.py", title="Cadastrar Usuario")
-    ]
-}
+pages = [
+    st.Page("pages/home.py", title="Início"), 
+    st.Page("pages/cadastro_tutor.py", title="Tutores"),
+    st.Page("pages/cadastro_pet.py", title="Pets"),
+    st.Page("pages/vacinas.py", title="Vacinas"),
+    st.Page("pages/historico.py", title="Histórico do Pet"),
+    st.Page("pages/0_Cadastrar_Usuario.py", title="Cadastrar Usuário")
+]
 
 navigator = st.navigation(pages)
 navigator.run()

@@ -34,11 +34,44 @@ def set_css():
                 font-weight: 600;
             }
 
-            /* === Sidebar === */
+                        /* === Sidebar === */
             section[data-testid="stSidebar"] {
-                background-color: #00B3AD; /* Turquesa personalizada */
-                color: #2A2E5F;
+                background-color: #ccefee; /* Turquesa */
+                padding-top: 20px;
+                padding-left: 10px;
+                padding-right: 10px;
             }
+
+            /* Título do usuário (texto acima do botão sair) */
+            section[data-testid="stSidebar"] .st-emotion-cache-10trblm {
+                font-weight: 700 !important;
+                font-size: 18px !important;
+                color: #1E3A5F !important; /* Azul mais forte */
+            }
+
+            /* Links da sidebar (páginas) */
+            section[data-testid="stSidebar"] a {
+                font-weight: 700 !important;     /* MAIS GROSSO */
+                font-size: 16px !important;      /* Maior */
+                color: #1E3A5F !important;        /* Azul escuro elegante */
+                padding: 8px 12px !important;
+                border-radius: 6px;
+            }
+
+            /* Hover */
+            section[data-testid="stSidebar"] a:hover {
+                background-color: #b6e4e2 !important; /* Turquesa mais forte */
+                color: #10324b !important;
+            }
+
+            /* Página selecionada */
+            section[data-testid="stSidebar"] .st-emotion-cache-1v0mbdj a {
+                background-color: #33C1C1 !important; /* Turquesa destaque */
+                color: white !important;
+                font-weight: 800 !important;
+                border-radius: 6px;
+            }
+
 
             /* Links da sidebar */
             section[data-testid="stSidebar"] a {

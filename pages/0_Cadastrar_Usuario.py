@@ -1,5 +1,8 @@
 import streamlit as st
 from backend.services import cadastrar_usuario
+from pages.style import set_css
+
+set_css()
 
 st.title("Cadastrar novo usuário")
 
