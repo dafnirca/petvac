@@ -1,8 +1,3 @@
 idUsuario,nome,senha,cargo,logado
-1,Dafni,12345,recepcionista,
-2,Pedro Silva,12345,veterinario,
-3,Julia Torres,12345,recepcionista,True
-4,Paula Araujo,12345,veterinario,
-5,Rodrigo Souza,12345,veterinario,
-6,Lisi Rosa,12345,recepcionista,
-7,Gabriel Kaiper,12345,veterinario,
+1,Lucas Almeida,12345,recepcionista,
+2,Camila Santos,12345,veterinario,

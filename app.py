@@ -94,7 +94,7 @@ pages = [
     st.Page("pages/cadastro_pet.py", title="Pets"),
     st.Page("pages/vacinas.py", title="Vacinas"),
     st.Page("pages/historico.py", title="Histórico do Pet"),
-    st.Page("pages/0_Cadastrar_Usuario.py", title="Cadastrar Usuário")
+    st.Page("pages/cadastrar_usuario.py", title="Cadastrar Usuário")
 ]
 
 navigator = st.navigation(pages)

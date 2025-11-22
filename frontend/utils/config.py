@@ -1,1 +1,0 @@
-# Variáveis de ambiente (ex: dados do banco)

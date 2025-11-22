@@ -3,6 +3,9 @@ import pandas as pd
 from backend.services import consultar_historico_pet, listar_pets, listar_tutores
 from pages.style import set_css
 
+import pandas as pd
+from datetime import datetime
+
 set_css()
 
 st.header("📖 Histórico de Vacinas do Pet")
@@ -58,10 +61,28 @@ else:
 
             # Exibir próximas doses
             if "dataProximaDose" in resultado.columns:
-                pendentes = resultado[resultado["dataProximaDose"].notna()]
-                if not pendentes.empty:
-                    st.subheader("📅 Próximas doses registradas:")
+
+                # Converter para datas reais (evita erro de comparação)
+                resultado["dataProximaDose"] = pd.to_datetime(
+                    resultado["dataProximaDose"], errors="coerce"
+                ).dt.date
+
+                hoje = datetime.now().date()
+
+             # Filtrar apenas doses com futura aplicação e não aplicadas
+                proximas = resultado[
+                    (resultado["dataProximaDose"].notna()) &
+                    (resultado["dataProximaDose"] > hoje) &
+                    (resultado["status"] != "aplicada")
+                ]
+
+                if not proximas.empty:
+                    st.subheader("📅 Próximas doses futuras:")
                     st.dataframe(
-                        pendentes[["nome", "dataProximaDose"]],
+                        proximas[["nome", "dataProximaDose"]],
                         use_container_width=True
                     )
+                else:
+                    st.info("Nenhuma dose futura pendente.")
+            
+                
