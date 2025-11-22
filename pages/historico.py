@@ -72,8 +72,7 @@ else:
              # Filtrar apenas doses com futura aplicação e não aplicadas
                 proximas = resultado[
                     (resultado["dataProximaDose"].notna()) &
-                    (resultado["dataProximaDose"] > hoje) &
-                    (resultado["status"] != "aplicada")
+                    (resultado["dataProximaDose"] > hoje)
                 ]
 
                 if not proximas.empty:

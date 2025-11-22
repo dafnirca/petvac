@@ -1,3 +1,3 @@
 idUsuario,nome,senha,cargo,logado
 1,Lucas Almeida,12345,recepcionista,
-2,Camila Santos,12345,veterinario,
+2,Camila Santos,12345,veterinario,True
