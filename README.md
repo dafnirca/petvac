@@ -1,4 +1,4 @@
-**🐾 PetVac – Sistema de Gerenciamento de Vacinação de Pets **
+**🐾 PetVac – Sistema de Gerenciamento de Vacinação de Pets**
 
 
 📌 Descrição do Projeto
