@@ -17,7 +17,8 @@ recepcionistas e veterinários.
 
 O PetVac foi projetado para uso exclusivo da clínica, onde somente veterinários e recepcionistas têm acesso ao sistema.
 
-→ Tecnologias Utilizadas
+
+→ Tecnologias Utilizadas 🛠️
 
 ● Python: para a lógica do backend.
 
@@ -39,7 +40,8 @@ O PetVac foi projetado para uso exclusivo da clínica, onde somente veterinário
 
 ○ notificacoes.csv
 
-→ Como Rodar o Projeto Localmente
+
+→ Como Rodar o Projeto Localmente 🚀
 
 1. Clonar o repositório
    
