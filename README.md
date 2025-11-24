@@ -1,136 +1,94 @@
-**🐾 PetVac – Sistema de Gerenciamento de Vacinação de Pets**
+# 🐾 PetVac – Sistema de Gerenciamento de Vacinação de Pets
 
+## 📌 Descrição do Projeto
 
-📌 Descrição do Projeto
+O **PetVac** é um sistema desenvolvido para auxiliar **clínicas veterinárias** no gerenciamento de:
 
-O PetVac é um sistema desenvolvido para auxiliar clínicas veterinárias no gerenciamento de pets, tutores, usuários internos e principalmente controle de vacinas, suas datas de aplicação, próximas doses e histórico.
+- Pets
+- Tutores
+- Usuários internos (veterinários e recepcionistas)
+- Vacinas: datas de aplicação, próximas doses e histórico
 
-O sistema possui:
+O sistema foi projetado para uso **exclusivo da clínica**, garantindo que apenas profissionais autorizados tenham acesso às informações.
 
-● Backend em Python, utilizando Pandas como “banco de dados” baseado em arquivos
-CSV.
+---
 
-● Frontend em Streamlit, permitindo uma interface simples e funcional para
-recepcionistas e veterinários.
+## 🛠️ Tecnologias Utilizadas
 
-● Organização modular para facilitar manutenção, leitura e evolução do projeto.
+- **Python** – Lógica de negócio (backend)
+- **Pandas** – Manipulação e persistência de dados em arquivos CSV
+- **Streamlit** – Interface web simples, funcional e rápida de desenvolver
+- **CSS** – Customização visual das telas
+- **CSV** – Armazenamento dos dados:
+  - `vacinas.csv`
+  - `pets.csv`
+  - `tutors.csv`
+  - `usuarios.csv`
 
-O PetVac foi projetado para uso exclusivo da clínica, onde somente veterinários e recepcionistas têm acesso ao sistema.
+---
 
+## 🚀 Como Rodar o Projeto Localmente
 
-→ Tecnologias Utilizadas 🛠️
+1. **Clonar o repositório**
 
-● Python: para a lógica do backend.
-
-● Pandas: para manipulação dos dados.
-
-● Streamlit: para a interface visual.
-
-● CSS (customização das telas)
-
-● CSV - Armazenamento dos dados:
-
-○ vacinas.csv
-
-○ pets.csv
-
-○ tutores.csv
-
-○ usuarios.csv
-
-○ notificacoes.csv
-
-
-→ Como Rodar o Projeto Localmente 🚀
-
-1. Clonar o repositório
-   
+bash
 git clone <repo-url>
-
-cd PetVac_package
-
-3. Criar e ativar o ambiente virtual
+cd PETVAC
    
-Windows
 
-python -m venv .venv
+2. **Criar e ativar o ambiente virtual**
 
+ python -m venv .venv
 .venv\Scripts\activate
 
-macOS / Linux
 
-python -m venv .venv
+2. **Instalar as dependências**
 
-source .venv/bin/activate
-
-4. Instalar dependências
-   
 pip install -r requirements.txt
 
-5. Executar o Streamlit
 
-python -m streamlit run frontend/app.py
+3. **Executar o sistema (Streamlit)**
 
-ou
+streamlit run app.py
 
-streamlit run frontend/app.py
+---
+## 📂 Estrutura do Projeto
 
-
-📂 Estrutura de Pastas
-
-PETVAC/
-
-│
-
+```
+PETVAC
 ├── backend/
-
-│   ├── database.py            # Carregamento e salvamento dos dados
-
-│   ├── historico_vacinas.py   # Classe HistóricoVacinas
-
-│   ├── pet.py                 # Classe e operações de Pets
-
-│   ├── services.py            # Funções principais do sistema
-
-│   ├── tutor.py               # Classe e operações de Tutores
-
-│   ├── usuario.py             # Classe Usuários (veterinários/recepcionistas)
-
-│   └── vacina.py              # Classe Vacina
-
+│   ├── database.py
+│   │     • carregar_dados()
+│   │     • salvar_dados()
+│   │     • Define as colunas dos arquivos CSV
+│   │
+│   ├── services.py
+│   │     • Funções principais do sistema:
+│   │       - cadastrar_pet(), atualizar_pet()
+│   │       - cadastrar_tutor(), atualizar_tutor()
+│   │       - registrar_vacina()
+│   │       - consultar_vacinas_pendentes() ...
+│   │
+│   ├── tutor.py                         • Classe Tutor
+│   ├── pet.py                           • Classe Pet
+│   ├── vacina.py                        • Classe Vacina
+│   ├── historico_vacinas.py             • Classe HistóricoVacina
+│   └── usuario.py                       • Classe Usuário
 │
-
 ├── data/
-
-│   ├── vacinas.csv
-
+│   ├── tutors.csv
 │   ├── pets.csv
-
-│   ├── tutores.csv
-
-│   ├── usuarios.csv
-
-│   └── notificacoes.csv
-
+│   ├── vacinas.csv
+│   └── usuarios.csv
 │
-
-├── frontend/
-
-│   ├── app.py                 # Arquivo principal do Streamlit
-
-│   ├── style.py               # CSS das telas
-
-│   └── pages/
-
-│       ├── cadastro_pet.py
-
-│       ├── cadastro_tutor.py
-
-│       ├── historico.py
-
-│       ├── login.py
-
-│       └── vacinas.py
-
-└── README.md
-**
+├── pages/   (interface – páginas do sistema)
+│   ├── home.py
+│   ├── cadastro_tutor.py
+│   ├── cadastro_pet.py
+│   ├── vacinas.py
+│   ├── historico.py
+│   └── cadastrar_usuario.py
+│
+└── app.py
+      • Arquivo principal do sistema  
+      • Controla login, cadastro de usuários e navegação entre as páginas
