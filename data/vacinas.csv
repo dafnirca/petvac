@@ -1,1 +1,17 @@
 idVacina,idPet,nome,dataAplicacao,dataProximaDose,status
+1,1,Antirrábica,2025-11-01,,aplicada
+2,5,Antirrábica,2025-11-01,,aplicada
+3,5,Calicivirose,2025-11-24,2025-12-24,aplicada
+4,5,V10,,2025-12-05,concluída
+5,5,V10,2025-11-24,,aplicada
+6,5,Gripe Canina,,2025-11-17,pendente
+7,6,Antirrábica,2025-11-01,,aplicada
+8,6,Calicivirose,2025-11-24,2025-12-15,aplicada
+9,6,V10,,2025-11-28,pendente
+10,6,Gripe Canina,,2025-11-17,concluída
+11,6,Gripe Canina,2025-11-24,,aplicada
+12,7,Antirrábica,2025-11-17,,aplicada
+13,7,Calicivirose,2025-11-24,2025-12-15,aplicada
+14,7,V10,,2025-12-01,pendente
+15,7,Gripe Canina,,2025-11-17,concluída
+16,7,Gripe Canina,2025-11-24,,aplicada

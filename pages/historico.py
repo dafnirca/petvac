@@ -72,16 +72,18 @@ else:
              # Filtrar apenas doses com futura aplicação e não aplicadas
                 proximas = resultado[
                     (resultado["dataProximaDose"].notna()) &
-                    (resultado["dataProximaDose"] > hoje)
+                    (resultado["dataProximaDose"] > hoje) &
+                    (resultado["status"] != "aplicada") &
+                    (resultado["status"] != "concluída")
                 ]
 
                 if not proximas.empty:
                     st.subheader("📅 Próximas doses futuras:")
                     st.dataframe(
-                        proximas[["nome", "dataProximaDose"]],
-                        use_container_width=True
+                    proximas[["nome", "dataProximaDose"]],
+                    use_container_width=True
                     )
                 else:
-                    st.info("Nenhuma dose futura pendente.")
+                 st.info("Nenhuma dose futura pendente.")
             
                 

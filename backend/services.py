@@ -113,17 +113,21 @@ def consultar_vacinas_pendentes():
     if df.empty:
         return pd.DataFrame()
     
-    hoje = datetime.now().date()
+    # Hoje como Timestamp
+    hoje = pd.Timestamp.now().normalize()
 
-    df["dataProximaDose"] = pd.to_datetime(df["dataProximaDose"], errors="coerce").dt.date
+    # Converter TODAS as datas para Timestamp (sem .dt.date)
+    df["dataProximaDose"] = pd.to_datetime(df["dataProximaDose"], errors="coerce")
+    df["dataAplicacao"] = pd.to_datetime(df["dataAplicacao"], errors="coerce")
 
-    # pendente = próxima dose existe e vacina NÃO foi aplicada
-    pendentes = df[(df["status"] == "pendente")]
+    # Filtrar apenas pendentes
+    pendentes = df[df["status"] == "pendente"].copy()
 
-    # adicionar coluna atrasada
+    # Atrasada = próxima dose < hoje
     pendentes["atrasada"] = pendentes["dataProximaDose"] < hoje
 
     return pendentes
+
 
 
 def consultar_historico_pet(idPet):
