@@ -1,4 +1,5 @@
 Visão geral
+
     O PetVac é um sistema desenvolvido para auxiliar clínicas veterinárias no gerenciamento de pets, tutores, usuários internos e principalmente controle de vacinas.
     
     O projeto foi desenvolvido com Python, Streamlit para o front-end e Pandas para a gestão de dados, com CSV para armazenar os dados.
@@ -83,6 +84,7 @@ Backend
           Os dados são armazenados em arquivos CSV e são manipulados com a biblioteca Pandas.
   
 Fluxo do sistema
+
     Cadastro:
         Recepcionista cadastra o tutor;
         Recepcionista cadastra o pet e associa ao tutor;
@@ -102,4 +104,5 @@ Fluxo do sistema
 
 
 Frontend 
+
     O frontend foi realizado com a biblioteca streamlit.
